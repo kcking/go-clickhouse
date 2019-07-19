@@ -17,13 +17,14 @@ func (c *conn) Ping(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	_, err = c.doRequest(ctx, req)
+	body, err := c.doRequest(ctx, req)
 	defer func() {
 		c.cancel = nil
 	}()
 	if err != nil {
 		return driver.ErrBadConn
 	}
+	defer body.Close()
 
 	if err != nil {
 		return driver.ErrBadConn
